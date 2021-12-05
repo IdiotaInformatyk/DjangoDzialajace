@@ -27,20 +27,25 @@ def index(response, id):
 
     return render(response, "home/list.html", {"ls": ls})
 
-def create(response):
-    if response.method =="POST":
-        form = CreateNewList(response.POST)
 
+# sprawdzenie, czy otrzymujemy żądanie POST, co oznaczałoby, że formularz został przesłany
+def create(response):
+    if response.method == "POST":
+        # utwórz nowy formularz i wypełnij go danymi, które otrzymaliśmy z zapytania
+        form = CreateNewList(response.POST)
+        # sprawdź, czy formularz jest poprawny, jeśli tak, utworzymy i zapiszemy nowy obiekt listy zadań
         if form.is_valid():
             n = form.cleaned_data["name"]
             t = ToDoList(name=n)
             t.save()
 
-        return HttpResponseRedirect("/%i" %t.id)
+        return HttpResponseRedirect("/%i" % t.id)
     else:
         form = CreateNewList()
 
-    return render(response, "home/create.html", {"form":form})
+    return render(response, "home/create.html", {"form": form})
+
+
 def login(response):
     return render(response, "home/base.html", {})
 

@@ -5,6 +5,7 @@
 {% block content %}
     <form method="POST" class="form-group">
         {% csrf_token %}
+        {#Cripsy dodaje dobry wygląd dla naszych formularzy#}
 	    {{ form|crispy }}
 	<button type="submit" class="btn btn-success">Register</button>
     </form>
