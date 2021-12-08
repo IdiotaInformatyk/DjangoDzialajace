@@ -1,10 +1,16 @@
 {#Przekazywanie z aplikacji home templatu base.html i wyświetlanie go(pasek boczny)#}
 {% extends 'home/base.html' %}
+<head>
+    <style type="text/css">
+    
+    </style>
 
-{% block title %}
-Home
-{% endblock %}
+
+
+   <title>{% block title %}Home{% endblock %}</title>
+</head>
 
 {% block content %}
 <h1>Home Page</h1>
+
 {% endblock %}
