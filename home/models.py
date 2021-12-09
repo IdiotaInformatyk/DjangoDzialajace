@@ -1,6 +1,5 @@
 from django.db import models
-
-
+# Dodawanie  co zapisać w bazie danych i definiowanie relacje między różnymi modelami i jakie mają cechy
 # Create your models here.
 class ToDoList(models.Model):
     name = models.CharField(max_length=200)

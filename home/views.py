@@ -46,9 +46,5 @@ def create(response):
     return render(response, "home/create.html", {"form": form})
 
 
-def login(response):
-    return render(response, "home/base.html", {})
-
-
 def home(response):
     return render(response, "home/home.html", {})
