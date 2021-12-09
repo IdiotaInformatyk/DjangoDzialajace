@@ -3,7 +3,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-# Wykorzystanie podstawki od Django do tworzenia urzytkowników
+# Wykorzystanie podstawki od Django do tworzenia urzytkowników (UserCreationForm)
 # EmailField wykorzystuje EmailValidator zeby sprawdzić poprawność zapisu emailu
 
 
