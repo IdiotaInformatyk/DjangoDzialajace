@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import RegisterForm
 # Create your views here.
-
+# przekazyjy dane do templatów
 
 def Registration(response):
     if response.method == "POST":
