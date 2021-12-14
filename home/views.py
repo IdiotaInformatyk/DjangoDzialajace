@@ -1,7 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import ToDoList, Item
 from .forms import CreateNewList
+from .forms import RegisterForm
+
+# przekazujy dane do templatów
+
+#metoda POST łączy dane z forms, koduje i przesyła na serwer
+# po czym dostaje odpowiedź zwrotną
 
 
 def index(response, id):
@@ -48,3 +54,18 @@ def create(response):
 
 def home(response):
     return render(response, "home/home.html", {})
+
+
+def Registration(request):
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+
+            form.save()
+
+        return redirect("/login")
+    form = RegisterForm()
+    return render(request, "home/Registration.html", {"form":form})
+
+def login(request):
+    return render(request, "home/login.html", {})
