@@ -12,10 +12,10 @@ class CreateNewList(forms.Form):
     # EmailField wykorzystuje EmailValidator zeby sprawdzić poprawność zapisu emailu
 
 
-# UserRegisterForm — This is for registration of a new user.
-# We user the Django’s default UserCreationForm and we define what should be in the forms.
-# We set the email to be Django’s EmailField.
-# Then we tell Django that model is User and the fields that we would ask the user to fill while registering.
+# UserRegisterForm — Służy do rejestracji nowego użytkownika.
+# Używamy domyślnego UserCreationForm Django i definiujemy, co powinno być w formularzach.
+# Ustawiliśmy adres e-mail na EmailField Django.
+# Następnie mówimy Django, że model to Użytkownik i pola, które poprosilibyśmy użytkownika o wypełnienie podczas rejestracji.
 
 
 class RegisterForm(UserCreationForm):
@@ -26,9 +26,8 @@ class RegisterForm(UserCreationForm):
         fields = ['username', 'email', 'password1', 'password2']
 
 
-# UserUpdateForm — This form will let users update their profile.
-# It will have all the same fields as Registration form but we would use the Django Model form instead of UserCreationForm.
-
+# UserUpdateForm — ten formularz pozwoli użytkownikom zaktualizować swój profil.
+# Będzie miał wszystkie te same pola, co formularz rejestracyjny, ale zamiast formularza UserCreationForm użyjemy formularza Model Django.
 
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
@@ -38,7 +37,7 @@ class UserUpdateForm(forms.ModelForm):
         fields = ['username', 'email']
 
 
-# ProfileUpdateForm — This form will let users update their profile.
+# ProfileUpdateForm — ten formularz pozwoli użytkownikom zaktualizować swoje profile.
 
 
 class ProfileUpdateForm(forms.ModelForm):
@@ -46,9 +45,9 @@ class ProfileUpdateForm(forms.ModelForm):
         model = Profile
         fields = ['bio', 'image']
 
-# NewPostForm — This is for posting a new post by any user.
-# It takes in three fields namely description, fields and tags.
-# user_name is supplied while saving since it is not to be asked to the user.
+# NewPostForm — służy do publikowania nowego posta przez dowolnego użytkownika.
+# Zajmuje trzy pola, a mianowicie opis, pola i tagi.
+# user_name jest podawana podczas zapisywania, ponieważ nie należy o nią pytać użytkownika.
 
 
 class NewPostForm(forms.ModelForm):
@@ -56,8 +55,9 @@ class NewPostForm(forms.ModelForm):
         model = Post
         fields = ['description', 'pic', 'tags']
 
-# NewCommentForm — Similar to NewPostForm, we have this form to accept new comments.
-# We only take in the comment to be posted and supply the post and the user later.
+
+# NewCommentForm — Podobnie jak NewPostForm, mamy ten formularz do przyjmowania nowych komentarzy.
+# Bierzemy tylko komentarz do opublikowania i dostarczamy post i użytkownika później.
 
 
 class NewCommentForm(forms.ModelForm):

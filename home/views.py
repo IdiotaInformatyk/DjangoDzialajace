@@ -19,12 +19,10 @@ from django.views.decorators.http import require_POST
 import json
 User = get_user_model()
 
-# users_list — This view will form the user list to be recommended to any user to help them discover new users to make friends with.
-# We will filter out our friends from that list and will exclude us too.
-# We will make this list by first adding our friend’s friends who are not our friends.
-# Then if our user list has still low members, we will add random people to recommend (mostly for a user with no friends).
-
-
+# users_list — ten widok utworzy listę użytkowników, która będzie polecana każdemu użytkownikowi, aby pomóc mu odkryć nowych użytkowników, z którymi można się zaprzyjaźnić.
+# Odfiltrujemy naszych znajomych z tej listy i również nas wykluczymy.
+# Utworzymy tę listę, dodając najpierw znajomych naszego przyjaciela, którzy nie są naszymi przyjaciółmi.
+# Następnie, jeśli nasza lista użytkowników nadal ma niską liczbę członków, dodamy losowe osoby do polecenia (głównie dla użytkownika bez znajomych).
 @login_required
 def users_list(request):
     users = Profile.objects.exclude(user=request.user)
@@ -59,7 +57,7 @@ def users_list(request):
     }
     return render(request, "home/users_list.html", context)
 
-# friend_list — This view will display all the friends of the user.
+# lista_przyjaciół — Ten widok wyświetla wszystkich znajomych użytkownika.
 
 
 def friend_list(request):
@@ -70,8 +68,9 @@ def friend_list(request):
     }
     return render(request, "home/friend_list.html", context)
 
-# send_friend_request — This will help us create a friend request instance and will send a request to the user.
-# We take in the id the user we are sending a request to so that we can send him the request.
+
+# send_friend_request — Pomoże nam to utworzyć instancję zaproszenia do znajomych i wyśle prośbę do użytkownika.
+# Pobieramy identyfikator użytkownika, do którego wysyłamy żądanie, aby móc wysłać mu żądanie.
 
 
 @login_required
@@ -94,10 +93,10 @@ def cancel_friend_request(request, id):
     frequest.delete()
     return HttpResponseRedirect('/home/{}'.format(user.profile.slug))
 
-# accept_friend_request
-# It will be used to accept the friend request of the user and we add user1 to user2’s friend list and vice versa.
-# Also, we will delete the friend request.
 
+# accept_friend_request
+# Zostanie użyty do zaakceptowania zaproszenia użytkownika do znajomych i dodamy użytkownika1 do listy znajomych użytkownika2 i na odwrót.
+# Ponadto usuniemy zaproszenie do znajomych.
 
 @login_required
 def accept_friend_request(request, id):
@@ -113,7 +112,7 @@ def accept_friend_request(request, id):
     frequest.delete()
     return HttpResponseRedirect('/home/{}'.format(request.user.profile.slug))
 
-# delete_friend_request — It will allow the user to delete any friend request he/she has received.
+# delete_friend_request — Pozwala użytkownikowi usunąć każde otrzymane zaproszenie do znajomych.
 
 
 @login_required
@@ -123,7 +122,7 @@ def delete_friend_request(request, id):
     frequest.delete()
     return HttpResponseRedirect('/home/{}'.format(request.user.profile.slug))
 
-# delete_friend — This will delete the friend of that user i.e. we would remove user1 from user2 friend list and vice versa.
+# delete_friend - To usunie znajomego tego użytkownika, tj. usunęlibyśmy użytkownika 1 z listy znajomych użytkownika 2 i na odwrót.
 
 
 def delete_friend(request, id):
@@ -133,10 +132,10 @@ def delete_friend(request, id):
     friend_profile.friends.remove(user_profile)
     return HttpResponseRedirect('/home/{}'.format(friend_profile.slug))
 
-# profile_view — This will be the profile view of any user.
-# It will showcase the friend's count and posts count of the user and their friend list.
-# Also, it would showcase the friend request received and sent by the user and can accept, decline or cancel the request.
-# Obviously, we would add conditions and checks, so that only the concerned user is shown the requests and sent list and they only have the power to accept or reject requests and not anyone viewing his/her profile.
+# profile_view — będzie to widok profilu dowolnego użytkownika.
+# Pokaże liczbę znajomych i liczbę postów użytkownika oraz jego listę znajomych.
+# Ponadto pokazywałby zaproszenie do znajomych otrzymane i wysłane przez użytkownika i może zaakceptować, odrzucić lub anulować prośbę.
+# Oczywiście dodamy warunki i kontrole, tak aby tylko zainteresowany użytkownik był pokazywany zapytaniami i wysłanymi listami i miał tylko uprawnienia do akceptowania lub odrzucania wniosków, a nie każdy, kto przegląda jego / jej profil.
 
 
 @login_required
@@ -149,17 +148,17 @@ def profile_view(request, slug):
 
     friends = p.friends.all()
 
-    # is this user our friend
+    # czy uzytkownik jest naszym znajomym
     button_status = 'none'
     if p not in request.user.profile.friends.all():
         button_status = 'not_friend'
 
-        # if we have sent him a friend request
+        # jezeli wyslalismy mu zaproszenie do znajomych
         if len(FriendRequest.objects.filter(
                 from_user=request.user).filter(to_user=p.user)) == 1:
             button_status = 'friend_request_sent'
 
-        # if we have recieved a friend request
+        # jezeli dostalismy zaproszenie do znajomych
         if len(FriendRequest.objects.filter(
                 from_user=p.user).filter(to_user=request.user)) == 1:
             button_status = 'friend_request_received'
@@ -175,8 +174,8 @@ def profile_view(request, slug):
 
     return render(request, "home/profile.html", context)
 
-# register — This will let users register on our website. It will render the registration form we created in forms.py file.
 
+# register — Umożliwi to użytkownikom zarejestrowanie się w naszej witrynie. Wyrenderuje formularz rejestracyjny, który stworzyliśmy w pliku form.py.
 
 def register(request):
     if request.method == 'POST':
@@ -190,7 +189,7 @@ def register(request):
         form = RegisterForm()
     return render(request, 'home/Registration.html', {'form': form})
 
-# edit_profile — This will let the users edit their profile with help of the forms we created.
+# edit_profile — To pozwoli użytkownikom edytować swój profil za pomocą utworzonych przez nas formularzy.
 
 
 @login_required
@@ -212,7 +211,8 @@ def edit_profile(request):
     }
     return render(request, 'home/edit_profile.html', context)
 
-# my_profile — This is same as profile_view but it will render your profile only.
+
+# my_profile — To to samo co profile_view, ale wyrenderuje tylko Twój profil.
 
 
 @login_required
@@ -224,12 +224,10 @@ def my_profile(request):
     user_posts = Post.objects.filter(user_name=you)
     friends = p.friends.all()
 
-    # is this user our friend
     button_status = 'none'
     if p not in request.user.profile.friends.all():
         button_status = 'not_friend'
 
-        # if we have sent him a friend request
         if len(FriendRequest.objects.filter(
                 from_user=request.user).filter(to_user=you)) == 1:
             button_status = 'friend_request_sent'
@@ -249,8 +247,8 @@ def my_profile(request):
 
     return render(request, "home/profile.html", context)
 
-# search_users — This will handle the search function of the users.
-# It takes in the query and then filters out relevant users.
+# search_users — To obsłuży funkcję wyszukiwania użytkowników.
+# Pobiera zapytanie, a następnie odfiltrowuje odpowiednich użytkowników.
 
 
 @login_required
