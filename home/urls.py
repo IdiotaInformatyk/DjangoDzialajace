@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
 
@@ -8,7 +7,6 @@ from home import views
 from .views import PostUpdateView, PostListView, UserPostListView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path("Registration/", views.Registration, name="Registration"),
     path('login/', auth_views.LoginView.as_view(template_name='home/login.html'), name='login'),
     path('', include("django.contrib.auth.urls")),

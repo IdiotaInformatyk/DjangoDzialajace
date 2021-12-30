@@ -1,21 +1,15 @@
 import random
 from django.contrib.auth import get_user_model
-
 from .forms import RegisterForm, UserUpdateForm, ProfileUpdateForm
-from .models import Post, Like
 from .models import Profile, FriendRequest
-
 from django.shortcuts import get_object_or_404, render, redirect
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
-from django.urls import reverse
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
-from django.core.paginator import Paginator
 from .forms import NewCommentForm, NewPostForm
-from django.views.generic import ListView, UpdateView, DeleteView
+from django.views.generic import ListView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .models import Post, Comments, Like
+from .models import Post, Like
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
 import json
 User = get_user_model()
 
@@ -66,6 +60,7 @@ def friend_list(request):
     context = {
         'friends': friends
     }
+
     return render(request, "home/friend_list.html", context)
 
 
@@ -79,7 +74,7 @@ def send_friend_request(request, id):
     frequest, created = FriendRequest.objects.get_or_create(
         from_user=request.user,
         to_user=user)
-    return redirect(frequest, '/home/{}'.format(user.profile.slug))
+    return HttpResponseRedirect('/users/{}'.format(user.profile.slug))
 
 # cancel_friend_request — It will cancel the friend request we sent to the user.
 
@@ -91,7 +86,7 @@ def cancel_friend_request(request, id):
         from_user=request.user,
         to_user=user).first()
     frequest.delete()
-    return HttpResponseRedirect('/home/{}'.format(user.profile.slug))
+    return HttpResponseRedirect('/users/{}'.format(user.profile.slug))
 
 
 # accept_friend_request
@@ -110,7 +105,7 @@ def accept_friend_request(request, id):
         request_rev = FriendRequest.objects.filter(from_user=request.user, to_user=from_user).first()
         request_rev.delete()
     frequest.delete()
-    return HttpResponseRedirect('/home/{}'.format(request.user.profile.slug))
+    return HttpResponseRedirect('/users/{}'.format(request.user.profile.slug))
 
 # delete_friend_request — Pozwala użytkownikowi usunąć każde otrzymane zaproszenie do znajomych.
 
@@ -120,7 +115,7 @@ def delete_friend_request(request, id):
     from_user = get_object_or_404(User, id=id)
     frequest = FriendRequest.objects.filter(from_user=from_user, to_user=request.user).first()
     frequest.delete()
-    return HttpResponseRedirect('/home/{}'.format(request.user.profile.slug))
+    return HttpResponseRedirect('/users/{}'.format(request.user.profile.slug))
 
 # delete_friend - To usunie znajomego tego użytkownika, tj. usunęlibyśmy użytkownika 1 z listy znajomych użytkownika 2 i na odwrót.
 
@@ -130,7 +125,7 @@ def delete_friend(request, id):
     friend_profile = get_object_or_404(Profile, id=id)
     user_profile.friends.remove(friend_profile)
     friend_profile.friends.remove(user_profile)
-    return HttpResponseRedirect('/home/{}'.format(friend_profile.slug))
+    return HttpResponseRedirect('/users/{}'.format(friend_profile.slug))
 
 # profile_view — będzie to widok profilu dowolnego użytkownika.
 # Pokaże liczbę znajomych i liczbę postów użytkownika oraz jego listę znajomych.
@@ -280,11 +275,17 @@ def login(request):
     return render(request, "home/login.html", {})
 
 
+# PostListView — This view handles the display of all the posts in an order which puts newer posts first up.
+# Each page displays 10 posts and then we need to move to the next page to view more.
+# Also, if the user is not authenticated, we do not give him the option to like on the post.
+# If the user is authenticated, we show whether the user has liked or not.
+
+
 class PostListView(ListView):
     model = Post
     template_name = 'home/home.html'
     context_object_name = 'posts'
-    ordering = ['-date_posted']
+    ordering = ['-likes']
     paginate_by = 10
 
     def get_context_data(self, **kwargs):
