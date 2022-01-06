@@ -21,7 +21,9 @@ urlpatterns = [
     path('users/friend/delete/<int:id>/', views.delete_friend, name='delete_friend'),
     path('edit-profile/', views.edit_profile, name='edit_profile'),
     path('my-profile/', views.my_profile, name='my_profile'),
+
     path('search_users/', views.search_users, name='search_users'),
+
     path('', PostListView.as_view(), name='home'),
     path('post/new/', views.create_post, name='post-create'),
     path('post/<int:pk>/', views.post_detail, name='post-detail'),
