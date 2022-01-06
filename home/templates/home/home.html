@@ -1,5 +1,7 @@
 {#Przekazywanie z aplikacji home templatu base.html i wyświetlanie go(pasek boczny)#}
-{% extends "home/layout.html" %} {% load static %} {% block searchform %}
+{% extends "home/layout.html" %} {% load static %}
+
+{% block searchform %}
 <form
   class="form-inline my-2 my-lg-0 ml-5"
   action="{% url 'search_posts' %}"
@@ -10,7 +12,9 @@
     Search
   </button>
 </form>
-{% endblock searchform %} {% block content %}
+{% endblock searchform %}
+
+{% block content %}
 <div class="container">
   <div class="row">
     <div class="col-md-8">

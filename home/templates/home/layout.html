@@ -48,10 +48,11 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           <a class="nav-item nav-link" href="{% url 'home' %}">Home</a>
+           {% if user.is_authenticated %}
           <a class="nav-item nav-link" href="{% url 'users_list' %}"
             >Add New Friends</a
           >
-          {% if user.is_authenticated %}
+
           <a class="nav-item nav-link" href="{% url 'friend_list' %}"
             >Friends</a
           >
@@ -84,7 +85,7 @@
     <footer class="page-footer font-small black">
       <div class="footer-copyright text-center py-3">
         Testowa Stronka <br /><small class="text-muted"
-          >Nie bluźnij</small
+          >Nie pluj jadem</small
         >
       </div>
     </footer>
