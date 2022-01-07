@@ -1,11 +1,14 @@
 {% extends "home/base.html" %}
+{% load crispy_forms_filters %}
 {% load static %} {% block cssfiles %} {% endblock cssfiles %} {% block searchform %}
     <form
             class="form-inline my-2 my-lg-0 ml-5"
             action="{% url 'search_users' %}"
             method="get"
     >
-        <input name="q" type="text" placeholder="Search users.."/>
+        <label>
+            <input name="q" type="text" placeholder="Search users.."/>
+        </label>
         <button class="btn btn-success my-2 my-sm-0 ml-4" type="submit">
             Search
         </button>
