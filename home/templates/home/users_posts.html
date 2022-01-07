@@ -1,4 +1,5 @@
-{% extends "home/base.html" %} {% load static %} {% block searchform %}
+{% extends "home/layout.html" %}
+{% load static %} {% block searchform %}
     <form
             class="form-inline my-2 my-lg-0 ml-5"
             action="{% url 'search_posts' %}"
